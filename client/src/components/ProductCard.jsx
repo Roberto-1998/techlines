@@ -19,7 +19,7 @@ import { Link as ReactLink } from 'react-router-dom';
 import { useState } from 'react';
 
 const Rating = ({ rating, numReviews }) => {
-  const { iconSize, setIconSize } = useState('14px');
+  const { iconSize } = useState('14px');
 
   return (
     <Flex>
