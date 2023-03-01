@@ -5,8 +5,9 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "server":"node server/index.js"
+    "server": "node server/index.js",
+    "client": "npm run start --prefix client",
+    "app":"concurrently npm \" npm run server  \"  \"npm run client  \"" 
   },
   "repository": {
     "type": "git",
@@ -20,6 +21,7 @@
   },
   "homepage": "https://github.com/Roberto-1998/techlines#readme",
   "dependencies": {
+    "concurrently": "^7.6.0",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "mongoose": "^7.0.0"
