@@ -8,7 +8,7 @@ const CartItem = ({ cartItem }) => {
 
   return (
     <Flex direction={{ base: 'column', md: 'row' }} justify={'space-between'} align={'center'}>
-      <Stack direction={'row'} spacing={'5'} width={'full'}>
+      <Stack direction={'row'} spacing={'4'} width={'full'}>
         <Image
           rounded={'lg'}
           w={'120px'}
@@ -20,7 +20,7 @@ const CartItem = ({ cartItem }) => {
           loading='lazy'
         />
         <Box pt={'4'}>
-          <Stack spacing={'0.5'}>
+          <Stack spacing={'0.5'} mr={'15px'}>
             <Text fontWeight={'medium'}>{name}</Text>
           </Stack>
         </Box>

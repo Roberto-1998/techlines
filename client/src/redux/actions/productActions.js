@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { setError, setLoading, setProducts } from '../slices/products';
+import { setError, setLoading, setProducts, setProduct } from '../slices/products';
 
 export const getProducts = () => async (dispatch) => {
   dispatch(setLoading(true));
@@ -15,6 +15,24 @@ export const getProducts = () => async (dispatch) => {
           : error.message
           ? error.message
           : 'An unexpected error has occured. Please try again later.'
+      )
+    );
+  }
+};
+
+export const getProductById = (id) => async (dispatch) => {
+  dispatch(setLoading(true));
+  try {
+    const { data } = await axios.get(`/api/products/${id}`);
+    dispatch(setProduct(data));
+  } catch (error) {
+    dispatch(
+      setError(
+        error.response && error.response.data.message
+          ? error.response.data.messsage
+          : error.message
+          ? error.message
+          : 'An unexpected error has occured. Pleasy try again later.'
       )
     );
   }
