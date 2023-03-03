@@ -10,14 +10,26 @@ import {
   useColorModeValue,
   useColorMode,
   Stack,
+  useToast,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  MenuDivider,
 } from '@chakra-ui/react';
 import { Link as ReactLink } from 'react-router-dom';
 import { GiTechnoHeart, GiHamburgerMenu } from 'react-icons/gi';
+import { MdLogout } from 'react-icons/md';
+import { FaTruck } from 'react-icons/fa';
+import { BiUserCircle, BiChevronDown } from 'react-icons/bi';
 import { BsMoonFill, BsSun } from 'react-icons/bs';
 import { AiOutlineClose } from 'react-icons/ai';
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../redux/actions/userActions';
 
 const links = [
+  { linkName: 'Home', path: '/' },
   { linkName: 'Products', path: '/products' },
   { linkName: 'ShoppingCart', path: '/cart' },
 ];
@@ -40,6 +52,19 @@ const Navbar = () => {
   const { colorMode, toggleColorMode } = useColorMode();
 
   const [isHovering, setIsHovering] = useState(false);
+  const user = useSelector((state) => state.user);
+  const { userInfo } = user;
+  const dispatch = useDispatch();
+  const toast = useToast();
+
+  const logoutHandler = () => {
+    dispatch(logout());
+    toast({
+      description: 'You have been logged out. ',
+      status: 'success',
+      isClosable: true,
+    });
+  };
 
   return (
     <Box bg={useColorModeValue('gray.100', 'gray.900')} px={4}>
@@ -84,22 +109,50 @@ const Navbar = () => {
               />
             </Flex>
           </NavLink>
-          <Button as={ReactLink} to={'/login'} p={2} fontSize={'sm'} fontWeight={400} variant={'link'}>
-            Sign In
-          </Button>
-          <Button
-            as={ReactLink}
-            to={'/registration'}
-            p={2}
-            fontSize={'sm'}
-            fontWeight={600}
-            _hover={{ bg: 'orange.400' }}
-            bg={'orange.500'}
-            color={'white'}
-            display={{ base: 'none', md: 'inline-flex' }}
-          >
-            Sign Up
-          </Button>
+          {userInfo ? (
+            <>
+              <Menu>
+                <MenuButton px={'4'} py={'2'} transition={'all 0.3s'} as={Button}>
+                  <Flex alignItems={'center'}>
+                    {userInfo.name} <BiChevronDown />
+                  </Flex>
+                </MenuButton>
+                <MenuList>
+                  <MenuItem as={ReactLink} to='/profile'>
+                    <BiUserCircle />
+                    <Text ml={'2'}>Profile</Text>
+                  </MenuItem>
+                  <MenuItem as={ReactLink} to='/your-orders'>
+                    <FaTruck />
+                    <Text ml={'2'}>Your Orders</Text>
+                  </MenuItem>
+                  <MenuDivider />
+                  <MenuItem onClick={logoutHandler}>
+                    <MdLogout /> <Text ml={'2'}>Logout</Text>
+                  </MenuItem>
+                </MenuList>
+              </Menu>
+            </>
+          ) : (
+            <>
+              <Button as={ReactLink} to={'/login'} p={2} fontSize={'sm'} fontWeight={400} variant={'link'}>
+                Sign In
+              </Button>
+              <Button
+                as={ReactLink}
+                to={'/registration'}
+                p={2}
+                fontSize={'sm'}
+                fontWeight={600}
+                _hover={{ bg: 'orange.400' }}
+                bg={'orange.500'}
+                color={'white'}
+                display={{ base: 'none', md: 'inline-flex' }}
+              >
+                Sign Up
+              </Button>
+            </>
+          )}
         </Flex>
       </Flex>
 
