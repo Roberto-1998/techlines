@@ -21,6 +21,7 @@ import { Link as ReactLink } from 'react-router-dom';
 import { GiTechnoHeart, GiHamburgerMenu } from 'react-icons/gi';
 import { MdLogout } from 'react-icons/md';
 import { FaTruck } from 'react-icons/fa';
+import { FiShoppingCart } from 'react-icons/fi';
 import { BiUserCircle, BiChevronDown } from 'react-icons/bi';
 import { BsMoonFill, BsSun } from 'react-icons/bs';
 import { AiOutlineClose } from 'react-icons/ai';
@@ -28,10 +29,25 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../redux/actions/userActions';
 
+const ShoppingCartIcon = () => {
+  const cartInfo = useSelector((state) => state.cart);
+  const { cart } = cartInfo;
+
+  return (
+    <Flex>
+      <Text fontStyle={'italic'} as='sub' fontSize={'xs'}>
+        {cart.length}
+      </Text>
+      <Icon ml={'-1.5'} as={FiShoppingCart} h={'4'} w={'7'} alignSelf={'center'} />
+      Cart
+    </Flex>
+  );
+};
+
 const links = [
   { linkName: 'Home', path: '/' },
   { linkName: 'Products', path: '/products' },
-  { linkName: 'ShoppingCart', path: '/cart' },
+  { linkName: <ShoppingCartIcon />, path: '/cart' },
 ];
 
 const NavLink = ({ path, children }) => (
