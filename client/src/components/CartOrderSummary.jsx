@@ -31,7 +31,7 @@ const CartOrderSummary = () => {
             Shipping
           </Text>
           <Text fontWeight={'medium'}>
-            {subtotal <= 100 ? (
+            {subtotal <= 1000 ? (
               <span>{standardShipping} &euro;</span>
             ) : (
               <Badge rounded={'full'} px={'2'} fontSize={'0.8em'} colorScheme='green'>
