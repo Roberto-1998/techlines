@@ -3,6 +3,7 @@ import User from '../models/User.js';
 import asyncHandler from 'express-async-handler';
 import jwt from 'jsonwebtoken';
 import protectRoute from '../middlewares/authMiddleware.js';
+import Order from '../models/Order.js';
 
 const userRoutes = Router();
 
@@ -86,8 +87,19 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   }
 });
 
+const getUserOrders = asyncHandler(async (req, res) => {
+  const orders = await Order.find({ user: req.params.id });
+  if (orders) {
+    res.json(orders);
+  } else {
+    res.status(404);
+    throw new Error('No Orders found ');
+  }
+});
+
 userRoutes.route('/login').post(loginUser);
 userRoutes.route('/register').post(registerLogin);
 userRoutes.route('/profile/:id').put(protectRoute, updateUserProfile);
+userRoutes.route('/:id').get(protectRoute, getUserOrders);
 
 export default userRoutes;

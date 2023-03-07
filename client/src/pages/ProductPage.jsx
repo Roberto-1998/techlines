@@ -16,30 +16,52 @@ import {
   SimpleGrid,
   useToast,
   Spinner,
+  Tooltip,
+  Button,
+  Input,
+  Textarea,
 } from '@chakra-ui/react';
 
 import { BiPackage, BiCheckShield, BiSupport } from 'react-icons/bi';
 import { AiOutlineMinus, AiFillStar } from 'react-icons/ai';
 import { GrAdd } from 'react-icons/gr';
 import { useDispatch, useSelector } from 'react-redux';
-import { getProductById } from '../redux/actions/productActions';
+import { createProductReview, getProductById, resetProductError } from '../redux/actions/productActions';
 import { addCartItem } from '../redux/actions/cartActions';
 import { useEffect, useState } from 'react';
 
 const ProductPage = () => {
+  const [comment, setComment] = useState('');
+  const [rating, setRating] = useState(1);
+  const [title, setTitle] = useState('');
+  const [reviewBoxOpen, setReviewBoxOpen] = useState(false);
+
   const [amount, setAmount] = useState(1);
   let { id } = useParams();
   const toast = useToast();
   const dispatch = useDispatch();
   const products = useSelector((state) => state.products);
-  const { loading, error, product } = products;
+  const { loading, error, product, reviewSend } = products;
 
   const cartContent = useSelector((state) => state.cart);
   const { cart } = cartContent;
 
+  const user = useSelector((state) => state.user);
+  const { userInfo } = user;
+
   useEffect(() => {
     dispatch(getProductById(id));
-  }, [dispatch, id, cart]);
+
+    if (reviewSend) {
+      toast({
+        description: 'Product review saved.',
+        status: 'success',
+        isClosable: true,
+      });
+      dispatch(resetProductError());
+      setReviewBoxOpen(false);
+    }
+  }, [dispatch, id, cart, reviewSend, toast]);
 
   const changeAmount = (input) => {
     if (input === 'plus') {
@@ -48,6 +70,14 @@ const ProductPage = () => {
     if (input === 'minus') {
       setAmount(amount - 1);
     }
+  };
+
+  const hasUserReviewd = () => {
+    return product.reviews.some((item) => item.user === userInfo._id);
+  };
+
+  const onSubmit = () => {
+    dispatch(createProductReview(product._id, userInfo._id, comment, rating, title));
   };
 
   const addItem = () => {
@@ -156,7 +186,7 @@ const ProductPage = () => {
                     onClick={() => addItem()}
                     disabled={product.stock === 0}
                     style={{
-                      backgroundColor: product.stock === 0 ? '#F1C4A9' : 'orange',
+                      backgroundColor: product.stock === 0 ? '#F1C4A9' : '#DD6B20',
                       padding: '8px 15px ',
                       borderRadius: '5px',
                       color: 'white',
@@ -191,6 +221,64 @@ const ProductPage = () => {
                 <Image mb={'30px'} src={product.image} alt={product.name} w={{ base: '250px' }} />
               </Flex>
             </Stack>
+            {userInfo && (
+              <>
+                <Tooltip label={hasUserReviewd() ? 'You have already reviewed this product. ' : ''} fontSize={'md'}>
+                  <button
+                    style={{
+                      marginBottom: '10px',
+                      padding: '8px 15px ',
+                      borderRadius: '5px',
+                      color: 'white',
+                      backgroundColor: hasUserReviewd() ? '#F1C4A9' : '#DD6B20',
+                      cursor: hasUserReviewd() ? 'not-allowed' : 'pointer',
+                    }}
+                    disabled={hasUserReviewd()}
+                    onClick={() => setReviewBoxOpen(!reviewBoxOpen)}
+                  >
+                    Write a review
+                  </button>
+                </Tooltip>
+                {reviewBoxOpen && (
+                  <Stack mb={'20px'}>
+                    <Wrap>
+                      <HStack spacing={'2px'}>
+                        <Button variant={'outline'} onClick={() => setRating(1)}>
+                          <AiFillStar w={'14px'} color='#E19E73' />
+                        </Button>
+                        <Button variant={'outline'} onClick={() => setRating(2)}>
+                          <AiFillStar w={'14px'} color={rating >= 2 ? '#E19E73' : '#EBEFF3'} />
+                        </Button>
+                        <Button variant={'outline'} onClick={() => setRating(3)}>
+                          <AiFillStar w={'14px'} color={rating >= 3 ? '#E19E73' : '#EBEFF3'} />
+                        </Button>
+                        <Button variant={'outline'} onClick={() => setRating(4)}>
+                          <AiFillStar w={'14px'} color={rating >= 4 ? '#E19E73' : '#EBEFF3'} />
+                        </Button>
+                        <Button variant={'outline'} onClick={() => setRating(5)}>
+                          <AiFillStar w={'14px'} color={rating >= 5 ? '#E19E73' : '#EBEFF3'} />
+                        </Button>
+                      </HStack>
+                    </Wrap>
+                    <Input
+                      onChange={(e) => {
+                        setTitle(e.target.value);
+                      }}
+                      placeholder='Review title (optional)'
+                    />
+                    <Textarea
+                      onChange={(e) => {
+                        setComment(e.target.value);
+                      }}
+                      placeholder={`The ${product.name} is...`}
+                    />
+                    <Button w={'140px'} colorScheme='orange' onClick={() => onSubmit()}>
+                      Publish review
+                    </Button>
+                  </Stack>
+                )}
+              </>
+            )}
             <Stack>
               <Text fontSize={'xl'} fontWeight={'bold'}>
                 Reviews
