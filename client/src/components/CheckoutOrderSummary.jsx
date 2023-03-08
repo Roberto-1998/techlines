@@ -45,7 +45,6 @@ const CheckoutOrderSummary = () => {
   );
 
   const total = useCallback(() => {
-    console.log(Number(shipping() === 0 ? Number(subtotal) : Number(subtotal) + shipping()).toFixed(2));
     return Number(shipping() === 0 ? Number(subtotal) : Number(subtotal) + shipping()).toFixed(2);
   }, [shipping, subtotal]);
 

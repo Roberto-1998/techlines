@@ -52,7 +52,7 @@ export const createProductReview = (productId, userId, comment, rating, title) =
       },
     };
 
-    const { data } = await axios.post(`/api/products/reviews/${productId}`, { comment, userId, rating, title }, config);
+    await axios.post(`/api/products/reviews/${productId}`, { comment, userId, rating, title }, config);
 
     dispatch(productReviewed());
   } catch (error) {

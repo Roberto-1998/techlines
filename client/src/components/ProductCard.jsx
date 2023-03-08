@@ -102,7 +102,7 @@ const ProductCard = ({ product }) => {
       </Flex>
       <Flex justify={'space-between'}>
         <Box fontSize={'2x1'} color={useColorModeValue('gray.800', 'white')}>
-          {product.price.toFixed(2)}
+          {Number(product.price).toFixed(2)}
           <span> </span>
           <Box as='span' color={'gray.600'} fontSize={'lg'}>
             &euro;

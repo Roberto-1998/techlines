@@ -182,7 +182,6 @@ const ProductPage = () => {
                     </button>
                   </Flex>
                   <button
-                    colorScheme='orange'
                     onClick={() => addItem()}
                     disabled={product.stock === 0}
                     style={{
