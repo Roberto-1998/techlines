@@ -8,12 +8,6 @@ import {
   Thead,
   Tbody,
   useDisclosure,
-  Alert,
-  Stack,
-  Spinner,
-  AlertIcon,
-  AlertTitle,
-  AlertDescription,
   Wrap,
   useToast,
   Text,
@@ -27,6 +21,8 @@ import { BsFillCheckCircleFill } from 'react-icons/bs';
 import { TbTruckDelivery } from 'react-icons/tb';
 import { RiDeleteBin5Fill } from 'react-icons/ri';
 import ConfirmRemovalAlert from './ConfirmRemovalAlert';
+import CustomAlert from './CustomAlert';
+import CustomSpinner from './CustomSpinner';
 
 const OrdersTab = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -70,19 +66,11 @@ const OrdersTab = () => {
 
   return (
     <Box>
-      {error && (
-        <Alert status='error'>
-          <AlertIcon />
-          <AlertTitle>Upps!</AlertTitle>
-          <AlertDescription>{error}</AlertDescription>
-        </Alert>
-      )}
+      {error && <CustomAlert error={error} status={'error'} title={'Upps!'} />}
 
       {loading ? (
         <Wrap justify={'center'}>
-          <Stack direction={'row'} spacing={'4'}>
-            <Spinner mt={'20px'} thickness='2px' speed='0.65s' emptyColor='gray.200' color='orange.500' size={'xl'} />
-          </Stack>
+          <CustomSpinner />
         </Wrap>
       ) : (
         <Box>

@@ -6,7 +6,6 @@ import {
   HStack,
   Link,
   Stack,
-  Spinner,
   Alert,
   AlertTitle,
   AlertIcon,
@@ -18,6 +17,8 @@ import { useSelector } from 'react-redux';
 import { Link as ReactLink } from 'react-router-dom';
 import CartItem from '../components/CartItem';
 import CartOrderSummary from '../components/CartOrderSummary';
+import CustomSpinner from '../components/CustomSpinner';
+import CustomAlert from '../components/CustomAlert';
 
 const CartPage = () => {
   const cartInfo = useSelector((state) => state.cart);
@@ -26,15 +27,9 @@ const CartPage = () => {
   return (
     <Wrap spacing={'30px'} justify={'center'} minHeight={'100vh'}>
       {loading ? (
-        <Stack direction={'row'} spacing={4}>
-          <Spinner mt={20} thickness='2px' speed='0.65s' emptyColor='gray.200' color='orange.500' size={'xl'} />
-        </Stack>
+        <CustomSpinner />
       ) : error ? (
-        <Alert status='error'>
-          <AlertIcon />
-          <AlertTitle>We are sorry!</AlertTitle>
-          <AlertDescription>{error}</AlertDescription>
-        </Alert>
+        <CustomAlert error={error} status={'error'} title={'We are sorry!.'} />
       ) : cart.length <= 0 ? (
         <Alert status='warning'>
           <AlertIcon />

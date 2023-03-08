@@ -1,14 +1,9 @@
 import { Box, Heading, Stack, Flex } from '@chakra-ui/react';
-import { useSelector } from 'react-redux';
-import { Navigate } from 'react-router-dom';
 import CheckoutOrderSummary from '../components/CheckoutOrderSummary';
 import ShippingInformation from '../components/ShippingInformation';
 
 const CheckoutPage = () => {
-  const user = useSelector((state) => state.user);
-  const { userInfo } = user;
-
-  return userInfo ? (
+  return (
     <Box
       minH={'100vh'}
       maxW={{ base: '3xl', lg: '7xl' }}
@@ -30,8 +25,6 @@ const CheckoutPage = () => {
         </Flex>
       </Stack>
     </Box>
-  ) : (
-    <Navigate to='login' replace={true} />
   );
 };
 

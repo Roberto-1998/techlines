@@ -15,7 +15,6 @@ import {
   useToast,
   Alert,
 } from '@chakra-ui/react';
-import { Navigate } from 'react-router-dom';
 import TextField from '../components/TextField';
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
@@ -41,7 +40,7 @@ const ProfilePage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [toast, updateSuccess]);
 
-  return userInfo ? (
+  return (
     <Formik
       initialValues={{
         name: userInfo.name,
@@ -138,8 +137,6 @@ const ProfilePage = () => {
         </Box>
       )}
     </Formik>
-  ) : (
-    <Navigate to={'/login'} replace={true} />
   );
 };
 

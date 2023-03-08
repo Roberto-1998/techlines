@@ -5,12 +5,6 @@ import {
   Table,
   Thead,
   Tbody,
-  Alert,
-  Stack,
-  Spinner,
-  AlertIcon,
-  AlertTitle,
-  AlertDescription,
   Wrap,
   useToast,
   Text,
@@ -25,6 +19,8 @@ import { getProducts, resetProductError } from '../redux/actions/productActions'
 
 import ProductsTableItem from './ProductsTableItem';
 import AddNewProduct from './AddNewProduct';
+import CustomSpinner from './CustomSpinner';
+import CustomAlert from './CustomAlert';
 
 const ProductsTab = () => {
   const dispatch = useDispatch();
@@ -49,19 +45,11 @@ const ProductsTab = () => {
 
   return (
     <Box>
-      {error && (
-        <Alert status='error'>
-          <AlertIcon />
-          <AlertTitle>Upps!</AlertTitle>
-          <AlertDescription>{error}</AlertDescription>
-        </Alert>
-      )}
+      {error && <CustomAlert error={error} title={'Upps'} status={'error'} />}
 
       {loading ? (
         <Wrap justify={'center'}>
-          <Stack direction={'row'} spacing={'4'}>
-            <Spinner mt={'20px'} thickness='2px' speed='0.65s' emptyColor='gray.200' color='orange.500' size={'xl'} />
-          </Stack>
+          <CustomSpinner />
         </Wrap>
       ) : (
         <Box>

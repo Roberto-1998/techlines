@@ -1,10 +1,5 @@
 import {
   TableContainer,
-  Stack,
-  Spinner,
-  Alert,
-  AlertIcon,
-  AlertDescription,
   Th,
   Tbody,
   Thead,
@@ -12,15 +7,15 @@ import {
   ListItem,
   UnorderedList,
   Wrap,
-  AlertTitle,
   Table,
   Tr,
   Td,
 } from '@chakra-ui/react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Navigate } from 'react-router-dom';
 import { getUserOrders } from '../redux/actions/userActions';
 import { useEffect } from 'react';
+import CustomSpinner from '../components/CustomSpinner';
+import CustomAlert from '../components/CustomAlert';
 
 const YourOrdersPage = () => {
   const dispatch = useDispatch();
@@ -33,20 +28,14 @@ const YourOrdersPage = () => {
     }
   }, [userInfo, dispatch]);
 
-  return userInfo ? (
+  return (
     <>
       {loading ? (
         <Wrap justify={'center'} direction={'column'} align={'center'} mt={'20px'} minH={'100vh'}>
-          <Stack direction={'row'} spacing={4}>
-            <Spinner mt={20} thickness='2px' speed='0.65s' emptyColor='gray.200' color='orange.500' size={'xl'} />
-          </Stack>
+          <CustomSpinner />
         </Wrap>
       ) : error ? (
-        <Alert status='error'>
-          <AlertIcon />
-          <AlertTitle>We are sorry!</AlertTitle>
-          <AlertDescription>{error}</AlertDescription>
-        </Alert>
+        <CustomAlert error={error} status={'error'} title={'We are sorry!. '} />
       ) : (
         orders && (
           <TableContainer minHeight={'100vh'}>
@@ -88,8 +77,6 @@ const YourOrdersPage = () => {
         )
       )}
     </>
-  ) : (
-    <Navigate to={'/login'} replace={true} />
   );
 };
 

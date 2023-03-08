@@ -1,18 +1,10 @@
 import { useEffect } from 'react';
-import {
-  Alert,
-  AlertDescription,
-  AlertIcon,
-  AlertTitle,
-  Center,
-  Spinner,
-  Stack,
-  Wrap,
-  WrapItem,
-} from '@chakra-ui/react';
+import { Center, Wrap, WrapItem } from '@chakra-ui/react';
 import ProductCard from '../components/ProductCard';
 import { useDispatch, useSelector } from 'react-redux';
 import { getProducts } from '../redux/actions/productActions';
+import CustomSpinner from '../components/CustomSpinner';
+import CustomAlert from '../components/CustomAlert';
 
 const ProductsPage = () => {
   const dispatch = useDispatch();
@@ -28,15 +20,9 @@ const ProductsPage = () => {
   return (
     <Wrap spacing={'30px'} justify={'center'} minHeight={'100vh'}>
       {loading ? (
-        <Stack direction={'row'} spacing={4}>
-          <Spinner mt={20} thickness='2px' speed='0.65s' emptyColor='gray.200' color='orange.500' size={'xl'} />
-        </Stack>
+        <CustomSpinner />
       ) : error ? (
-        <Alert status='error'>
-          <AlertIcon />
-          <AlertTitle>We are sorry!</AlertTitle>
-          <AlertDescription>{error}</AlertDescription>
-        </Alert>
+        <CustomAlert error={error} status={'error'} title={'We are sorry!. '} />
       ) : (
         products.map((product) => (
           <WrapItem key={product._id}>

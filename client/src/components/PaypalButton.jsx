@@ -1,12 +1,26 @@
 import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
-import { PAYPAL_CLIENT_ID } from '../client_id';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import CustomSpinner from './CustomSpinner';
 
 const PayPalButton = ({ total, onPaymentSuccess, onPaymentError, disabled }) => {
-  return (
-    <PayPalScriptProvider options={{ 'client-id': PAYPAL_CLIENT_ID }}>
+  const [paypalClient, setPayPalCLient] = useState(null);
+
+  useEffect(() => {
+    const paypalKey = async () => {
+      const { data: clientId } = await axios.get('/api/config/paypal');
+      setPayPalCLient(clientId);
+    };
+    paypalKey();
+  }, [paypalClient]);
+
+  return !paypalClient ? (
+    <CustomSpinner />
+  ) : (
+    <PayPalScriptProvider options={{ 'client-id': paypalClient }}>
       <PayPalButtons
         disabled={disabled}
-        forceReRender={[total()]}
+        forceReRender={[total(), paypalClient]}
         createOrder={(data, actions) => {
           return actions.order.create({
             purchase_units: [

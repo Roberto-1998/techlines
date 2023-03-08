@@ -5,17 +5,11 @@ import {
   Text,
   Wrap,
   Stack,
-  Alert,
-  AlertIcon,
-  AlertDescription,
-  AlertTitle,
   Flex,
   Badge,
   Heading,
-  HStack,
   SimpleGrid,
   useToast,
-  Spinner,
   Tooltip,
   Button,
   Input,
@@ -23,12 +17,16 @@ import {
 } from '@chakra-ui/react';
 
 import { BiPackage, BiCheckShield, BiSupport } from 'react-icons/bi';
-import { AiOutlineMinus, AiFillStar } from 'react-icons/ai';
+import { AiOutlineMinus } from 'react-icons/ai';
 import { GrAdd } from 'react-icons/gr';
 import { useDispatch, useSelector } from 'react-redux';
 import { createProductReview, getProductById, resetProductError } from '../redux/actions/productActions';
 import { addCartItem } from '../redux/actions/cartActions';
 import { useEffect, useState } from 'react';
+import CustomSpinner from '../components/CustomSpinner';
+import CustomAlert from '../components/CustomAlert';
+import CustomRating from '../components/CustomRating';
+import CustomButtonRating from '../components/CustomButtonRating';
 
 const ProductPage = () => {
   const [comment, setComment] = useState('');
@@ -99,15 +97,9 @@ const ProductPage = () => {
   return (
     <Wrap spacing={'30px'} justify={'center'} minH={'100vh'}>
       {loading ? (
-        <Stack direction={'row'} spacing={4}>
-          <Spinner mt={20} thickness='2px' speed='0.65s' emptyColor='gray.200' color='orange.500' size={'xl'} />
-        </Stack>
+        <CustomSpinner />
       ) : error ? (
-        <Alert status='error'>
-          <AlertIcon />
-          <AlertTitle>We are sorry!</AlertTitle>
-          <AlertDescription>{error}</AlertDescription>
-        </Alert>
+        <CustomAlert error={error} status={'error'} title={'We are sorry!. '} />
       ) : (
         product && (
           <Box
@@ -140,13 +132,7 @@ const ProductPage = () => {
                   <Box>
                     <Text fontSize={'xl'}>{product.price} &euro;</Text>
                     <Flex>
-                      <HStack spacing={'2px'}>
-                        <AiFillStar w={'14px'} color='#E19E73' />
-                        <AiFillStar w={'14px'} color={product.rating >= 2 ? '#E19E73' : '#EBEFF3'} />
-                        <AiFillStar w={'14px'} color={product.rating >= 3 ? '#E19E73' : '#EBEFF3'} />
-                        <AiFillStar w={'14px'} color={product.rating >= 4 ? '#E19E73' : '#EBEFF3'} />
-                        <AiFillStar w={'14px'} color={product.rating >= 5 ? '#E19E73' : '#EBEFF3'} />
-                      </HStack>
+                      <CustomRating value={product.rating} />
                       <Text fontSize={'md'} fontWeight={'bold'} ml={'4px'}>
                         {`${product.numberOfReviews} ${product.numberOfReviews === 1 ? 'Review' : 'Reviews'}`}
                       </Text>
@@ -241,23 +227,7 @@ const ProductPage = () => {
                 {reviewBoxOpen && (
                   <Stack mb={'20px'}>
                     <Wrap>
-                      <HStack spacing={'2px'}>
-                        <Button variant={'outline'} onClick={() => setRating(1)}>
-                          <AiFillStar w={'14px'} color='#E19E73' />
-                        </Button>
-                        <Button variant={'outline'} onClick={() => setRating(2)}>
-                          <AiFillStar w={'14px'} color={rating >= 2 ? '#E19E73' : '#EBEFF3'} />
-                        </Button>
-                        <Button variant={'outline'} onClick={() => setRating(3)}>
-                          <AiFillStar w={'14px'} color={rating >= 3 ? '#E19E73' : '#EBEFF3'} />
-                        </Button>
-                        <Button variant={'outline'} onClick={() => setRating(4)}>
-                          <AiFillStar w={'14px'} color={rating >= 4 ? '#E19E73' : '#EBEFF3'} />
-                        </Button>
-                        <Button variant={'outline'} onClick={() => setRating(5)}>
-                          <AiFillStar w={'14px'} color={rating >= 5 ? '#E19E73' : '#EBEFF3'} />
-                        </Button>
-                      </HStack>
+                      <CustomButtonRating setRating={setRating} value={rating} />
                     </Wrap>
                     <Input
                       onChange={(e) => {
@@ -283,24 +253,18 @@ const ProductPage = () => {
                 Reviews
               </Text>
               <SimpleGrid minChildWidth={'300px'} spacingX={'40px'} spacingY={'20px'}>
-                {product.reviews.map((review) => (
-                  <Box key={review._id}>
-                    <Flex spacing='2px' alignItems={'center'}>
-                      <AiFillStar w={'14px'} color='#E19E73' />
-                      <AiFillStar w={'14px'} color={review.rating >= 2 ? '#E19E73' : '#EBEFF3'} />
-                      <AiFillStar w={'14px'} color={review.rating >= 3 ? '#E19E73' : '#EBEFF3'} />
-                      <AiFillStar w={'14px'} color={review.rating >= 4 ? '#E19E73' : '#EBEFF3'} />
-                      <AiFillStar w={'14px'} color={review.rating >= 5 ? '#E19E73' : '#EBEFF3'} />
-                      <Text fontWeight={'semibold'} ml={'4px'}>
-                        {review.title && review.title}
-                      </Text>
-                    </Flex>
-                    <Box py={'12px'}>{review.comment}</Box>
-                    <Text fontSize={'sm'} color={'gray.400'}>
-                      by {review.name}, {new Date(review.createdAt).toDateString()}
-                    </Text>
-                  </Box>
-                ))}
+                {product.reviews.length > 0
+                  ? product.reviews.map((review) => (
+                      <Box key={review._id}>
+                        <CustomRating value={review.rating} />
+
+                        <Box py={'12px'}>{review.comment}</Box>
+                        <Text fontSize={'sm'} color={'gray.400'}>
+                          by {review.name}, {new Date(review.createdAt).toDateString()}
+                        </Text>
+                      </Box>
+                    ))
+                  : 'No reviews yet...'}
               </SimpleGrid>
             </Stack>
           </Box>

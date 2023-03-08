@@ -23,13 +23,12 @@ import {
   AccordionButton,
   AccordionPanel,
   Textarea,
-  HStack,
 } from '@chakra-ui/react';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { removeReview } from '../redux/actions/adminActions';
 import { getProducts, resetProductError } from '../redux/actions/productActions';
-import { AiFillStar } from 'react-icons/ai';
+import CustomRating from './CustomRating';
 
 const ReviewsTab = () => {
   const dispatch = useDispatch();
@@ -111,13 +110,7 @@ const ReviewsTab = () => {
                               <Tr key={review._id}>
                                 <Td>{review.name}</Td>
                                 <Td>
-                                  <HStack spacing={'2px'}>
-                                    <AiFillStar w={'14px'} color='#E19E73' />
-                                    <AiFillStar w={'14px'} color={review.rating >= 2 ? '#E19E73' : '#EBEFF3'} />
-                                    <AiFillStar w={'14px'} color={review.rating >= 3 ? '#E19E73' : '#EBEFF3'} />
-                                    <AiFillStar w={'14px'} color={review.rating >= 4 ? '#E19E73' : '#EBEFF3'} />
-                                    <AiFillStar w={'14px'} color={review.rating >= 5 ? '#E19E73' : '#EBEFF3'} />
-                                  </HStack>
+                                  <CustomRating value={review.rating} />
                                 </Td>
                                 <Td>{review.title}</Td>
                                 <Td>

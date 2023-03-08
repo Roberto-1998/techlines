@@ -13,9 +13,9 @@ node_modules/
 /client/src/client_id.js
 
 # production
-/build
+client/build
 
-images
+
 
 # misc
 .DS_Store

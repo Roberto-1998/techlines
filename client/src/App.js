@@ -1,37 +1,72 @@
 import { Route, Routes } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import { ChakraProvider } from '@chakra-ui/react';
-import ProductsPage from './pages/ProductsPage';
-import CartPage from './pages/CartPage';
-import ProductPage from './pages/ProductPage';
 import Footer from './components/Footer';
-import HomePage from './pages/HomePage';
-import LoginPage from './pages/LoginPage';
-import RegistrationPage from './pages/RegistrationPage';
-import ProfilePage from './pages/ProfilePage';
-import CheckoutPage from './pages/CheckoutPage';
-import YourOrdersPage from './pages/YourOrdersPage';
-import AdminConsolePage from './pages/AdminConsolePage';
+import { Suspense, lazy } from 'react';
+import CustomSpinner from './components/CustomSpinner';
+import ProtectedRoute from './components/ProtectedRoute';
+
+const LazyHomePage = lazy(() => import('./pages/HomePage'));
+const LazyProductsPage = lazy(() => import('./pages/ProductsPage'));
+const LazyProductPage = lazy(() => import('./pages/ProductPage'));
+const LazyCartPage = lazy(() => import('./pages/CartPage'));
+const LazyLoginPage = lazy(() => import('./pages/LoginPage'));
+const LazyRegistrationPage = lazy(() => import('./pages/RegistrationPage'));
+const LazyProfilePage = lazy(() => import('./pages/ProfilePage'));
+const LazyCheckoutPage = lazy(() => import('./pages/CheckoutPage'));
+const LazyYourOrdersPage = lazy(() => import('./pages/YourOrdersPage'));
+const LazyAdminConsolePage = lazy(() => import('./pages/AdminConsolePage'));
 
 function App() {
   return (
     <ChakraProvider>
-      <Navbar />
-      <main>
-        <Routes>
-          <Route path='/' element={<HomePage />} />
-          <Route path='/products' element={<ProductsPage />} />
-          <Route path='/product/:id' element={<ProductPage />} />
-          <Route path='/cart' element={<CartPage />} />
-          <Route path='/login' element={<LoginPage />} />
-          <Route path='/registration' element={<RegistrationPage />} />
-          <Route path='/profile' element={<ProfilePage />} />
-          <Route path='/checkout' element={<CheckoutPage />} />
-          <Route path='/your-orders' element={<YourOrdersPage />} />
-          <Route path='/admin-console' element={<AdminConsolePage />} />
-        </Routes>
-      </main>
-      <Footer />
+      <Suspense fallback={<CustomSpinner />}>
+        <Navbar />
+        <main>
+          <Routes>
+            <Route path='/' element={<LazyHomePage />} />
+            <Route path='/products' element={<LazyProductsPage />} />
+            <Route path='/product/:id' element={<LazyProductPage />} />
+            <Route path='/cart' element={<LazyCartPage />} />
+            <Route path='/login' element={<LazyLoginPage />} />
+            <Route path='/registration' element={<LazyRegistrationPage />} />
+            <Route
+              path='/profile'
+              element={
+                <ProtectedRoute>
+                  <LazyProfilePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path='/checkout'
+              element={
+                <ProtectedRoute>
+                  <LazyCheckoutPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path='/your-orders'
+              element={
+                <ProtectedRoute>
+                  {' '}
+                  <LazyYourOrdersPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path='/admin-console'
+              element={
+                <ProtectedRoute>
+                  <LazyAdminConsolePage />
+                </ProtectedRoute>
+              }
+            />
+          </Routes>
+        </main>
+        <Footer />
+      </Suspense>
     </ChakraProvider>
   );
 }

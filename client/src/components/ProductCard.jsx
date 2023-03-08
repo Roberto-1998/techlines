@@ -10,29 +10,19 @@ import {
   Tooltip,
   Stack,
   Link,
-  HStack,
   Text,
   useToast,
 } from '@chakra-ui/react';
 import { FiShoppingCart } from 'react-icons/fi';
-import { AiFillStar } from 'react-icons/ai';
 import { Link as ReactLink } from 'react-router-dom';
-import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addCartItem } from '../redux/actions/cartActions';
+import CustomRating from './CustomRating';
 
 const Rating = ({ rating, numberOfReviews }) => {
-  const { iconSize } = useState('14px');
-
   return (
     <Flex>
-      <HStack spacing={'2px'}>
-        <AiFillStar size={iconSize} w={'14px'} color='#E19E73' />
-        <AiFillStar size={iconSize} w={'14px'} color={rating >= 2 ? '#E19E73' : '#EBEFF3'} />
-        <AiFillStar size={iconSize} w={'14px'} color={rating >= 3 ? '#E19E73' : '#EBEFF3'} />
-        <AiFillStar size={iconSize} w={'14px'} color={rating >= 4 ? '#E19E73' : '#EBEFF3'} />
-        <AiFillStar size={iconSize} w={'14px'} color={rating >= 5 ? '#E19E73' : '#EBEFF3'} />
-      </HStack>
+      <CustomRating value={rating} />
       <Text fontSize={'md'} fontWeight={'bold'} ml={'4px'}>
         {`${numberOfReviews} ${numberOfReviews === 1 ? 'Review' : 'Reviews'}`}
       </Text>

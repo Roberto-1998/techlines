@@ -27,18 +27,16 @@ const loginUser = asyncHandler(async (req, res) => {
       createdAt: user.createdAt,
     });
   } else {
-    res.status(401);
-    throw new Error('Invalid email or password.');
+    res.status(401).send('Invalid email or password.');
   }
 });
 
-const registerLogin = asyncHandler(async (req, res) => {
+const registerUser = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
 
   const userExists = await User.findOne({ email });
   if (userExists) {
-    res.status(400);
-    throw new Error('We already have an account with that email address. ');
+    res.status(400).send('We already have an account with that email address. ');
   }
 
   const user = await User.create({
@@ -56,8 +54,7 @@ const registerLogin = asyncHandler(async (req, res) => {
       token: genToken(user._id),
     });
   } else {
-    res.json(400);
-    throw new Error('Invalid user data');
+    res.json(400).send('Invalid user data');
   }
 });
 
@@ -82,7 +79,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
       createdAt: updateUser.createdAt,
     });
   } else {
-    res.status(404);
+    res.status(404).send('User not found');
     throw new Error('User not found');
   }
 });
@@ -113,7 +110,7 @@ const deleteUser = asyncHandler(async (req, res) => {
 });
 
 userRoutes.route('/login').post(loginUser);
-userRoutes.route('/register').post(registerLogin);
+userRoutes.route('/register').post(registerUser);
 userRoutes.route('/profile/:id').put(protectRoute, updateUserProfile);
 userRoutes.route('/:id').get(protectRoute, getUserOrders);
 userRoutes.route('/').get(protectRoute, admin, getUsers);
