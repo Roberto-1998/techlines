@@ -1,7 +1,7 @@
-import express from 'express';
+import express, { json } from 'express';
 import asyncHandler from 'express-async-handler';
 import Order from '../models/Order.js';
-import { protectRoute } from '../middlewares/authMiddleware.js';
+import { admin, protectRoute } from '../middlewares/authMiddleware.js';
 const orderRoutes = express.Router();
 
 const createOrder = asyncHandler(async (req, res) => {
@@ -28,6 +28,43 @@ const createOrder = asyncHandler(async (req, res) => {
   }
 });
 
+const getOrders = asyncHandler(async (req, res) => {
+  try {
+    const orders = await Order.find({});
+    res.json(orders);
+  } catch (error) {
+    res.status(500);
+    throw new Error('Upps...something went wrong');
+  }
+});
+
+const deleteOrder = asyncHandler(async (req, res) => {
+  const order = await Order.findByIdAndDelete(req.params.id);
+
+  if (order) {
+    res.json(order);
+  } else {
+    res.status(404);
+    throw new Error('Order not found. ');
+  }
+});
+
+const setDelivered = asyncHandler(async (req, res) => {
+  const order = await Order.findById(req.params.id);
+
+  if (order) {
+    order.isDelivered = true;
+    const updatedOrder = await order.save();
+    res.json(updatedOrder);
+  } else {
+    res.status(404);
+    throw new Error('Order could not be updated. ');
+  }
+});
+
 orderRoutes.route('/').post(protectRoute, createOrder);
+orderRoutes.route('/:id').delete(protectRoute, admin, deleteOrder);
+orderRoutes.route('/:id').put(protectRoute, admin, setDelivered);
+orderRoutes.route('/').get(protectRoute, admin, getOrders);
 
 export default orderRoutes;
