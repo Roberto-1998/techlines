@@ -19,7 +19,7 @@ import {
 } from '@chakra-ui/react';
 import { Link as ReactLink } from 'react-router-dom';
 import { GiTechnoHeart, GiHamburgerMenu } from 'react-icons/gi';
-import { MdLogout } from 'react-icons/md';
+import { MdLogout, MdOutlineAdminPanelSettings } from 'react-icons/md';
 import { FaTruck } from 'react-icons/fa';
 import { FiShoppingCart } from 'react-icons/fi';
 import { BiUserCircle, BiChevronDown } from 'react-icons/bi';
@@ -142,6 +142,15 @@ const Navbar = () => {
                     <FaTruck />
                     <Text ml={'2'}>Your Orders</Text>
                   </MenuItem>
+                  {userInfo.isAdmin === 'true' && (
+                    <>
+                      <MenuDivider />
+                      <MenuItem as={ReactLink} to={'/admin-console'}>
+                        <MdOutlineAdminPanelSettings />
+                        <Text ml='2'>Admin Console</Text>
+                      </MenuItem>
+                    </>
+                  )}
                   <MenuDivider />
                   <MenuItem onClick={logoutHandler}>
                     <MdLogout /> <Text ml={'2'}>Logout</Text>

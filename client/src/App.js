@@ -11,6 +11,7 @@ import RegistrationPage from './pages/RegistrationPage';
 import ProfilePage from './pages/ProfilePage';
 import CheckoutPage from './pages/CheckoutPage';
 import YourOrdersPage from './pages/YourOrdersPage';
+import AdminConsolePage from './pages/AdminConsolePage';
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
           <Route path='/profile' element={<ProfilePage />} />
           <Route path='/checkout' element={<CheckoutPage />} />
           <Route path='/your-orders' element={<YourOrdersPage />} />
+          <Route path='/admin-console' element={<AdminConsolePage />} />
         </Routes>
       </main>
       <Footer />
