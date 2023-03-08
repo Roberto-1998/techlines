@@ -108,11 +108,18 @@ const ProductCard = ({ product }) => {
             &euro;
           </Box>
         </Box>
-        <Tooltip label='Add to cart' bg={'white'} placement='bottom' color={'gray.800'} fontSize={'1em'}>
-          <Button variant={'ghost'} display={'flex'} disabled={product.stock < 1} onClick={() => addItem(product._id)}>
-            <Icon as={FiShoppingCart} h={6} w={6} alignSelf={'end'} />
-          </Button>
-        </Tooltip>
+        {product.stock > 0 ? (
+          <Tooltip label='Add to cart' bg={'white'} placement='bottom' color={'gray.800'} fontSize={'1em'}>
+            <Button
+              variant={'ghost'}
+              display={'flex'}
+              disabled={product.stock < 1}
+              onClick={() => addItem(product._id)}
+            >
+              <Icon as={FiShoppingCart} h={6} w={6} alignSelf={'end'} />
+            </Button>
+          </Tooltip>
+        ) : null}
       </Flex>
     </Stack>
   );
