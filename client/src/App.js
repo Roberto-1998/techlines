@@ -16,6 +16,7 @@ const LazyProfilePage = lazy(() => import('./pages/ProfilePage'));
 const LazyCheckoutPage = lazy(() => import('./pages/CheckoutPage'));
 const LazyYourOrdersPage = lazy(() => import('./pages/YourOrdersPage'));
 const LazyAdminConsolePage = lazy(() => import('./pages/AdminConsolePage'));
+const LazyOrderSuccessPage = lazy(() => import('./pages/OrderSuccessPage'));
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
             <Route path='/cart' element={<LazyCartPage />} />
             <Route path='/login' element={<LazyLoginPage />} />
             <Route path='/registration' element={<LazyRegistrationPage />} />
+            <Route path='/order-success' element={<LazyOrderSuccessPage />} />
             <Route
               path='/profile'
               element={
