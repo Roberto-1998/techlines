@@ -241,7 +241,7 @@ const ProductPage = () => {
                       }}
                       placeholder={`The ${product.name} is...`}
                     />
-                    <Button w={'140px'} colorScheme='orange' onClick={() => onSubmit()}>
+                    <Button w={'140px'} colorScheme='orange' onClick={() => onSubmit()} isDisabled={comment === ''}>
                       Publish review
                     </Button>
                   </Stack>
