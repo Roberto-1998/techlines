@@ -28,10 +28,9 @@
 
 ### Built with
 
-- React
-- JavaScript
-- Threejs
-- TailwindCSS
+- Reactjs, React Hooks, Redux Toolkit, Chakra UI, Paypal Payment.
+- Nodejs, Express, MongoDB, JsonWebToken, API.
+- Git, Github, CI/CD render.com.
 
 
 ## Author
